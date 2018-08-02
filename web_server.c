@@ -13,6 +13,9 @@
 #else
 #include <arpa/inet.h>
 #include <termios.h>
+#include <netdb.h>
+#include <ifaddrs.h>
+#include <arpa/inet.h>
 #endif
 
 #ifndef SYSTEM_FREERTOS
@@ -273,9 +276,27 @@ static void connection_process(struct connection_state *c)
  */
 static bool check_origin(const char *origin)
 {
-    if (strcmp(origin, "http://10.0.1.128") == 0) {
-        // always accept
-        return true;
+    struct ifaddrs *ifaddr, *ifa;
+    char host[NI_MAXHOST];
+
+    if (getifaddrs(&ifaddr) == -1) {
+        printf("Could not get IPs");
+    }
+
+    // check for matching IPs on all interfaces of the device
+    for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+        if (ifa->ifa_addr == NULL) {
+            continue;
+        }
+        getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in), host, NI_MAXHOST,
+                    NULL, 0, NI_NUMERICHOST);
+        if (ifa->ifa_addr->sa_family==AF_INET) {
+            char host_string[20] = "http://";
+            strcat(host_string, host);
+            if (strcmp(origin, host_string) == 0) {
+                return true;
+            }
+        }
     }
 
 #ifdef SYSTEM_FREERTOS
