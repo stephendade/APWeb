@@ -96,11 +96,14 @@ void process_server_response(char* reply, char* result)
     message_type = get_message_type(msg_header);
 
     p = strtok(NULL, "$");
+    result[0] = '\0';
 
     switch (message_type) {
     case GET_DEVICE_PROPS:
         ;
-        strcpy(result, p);
+        if (result) {
+            strcpy(result, p);
+        }
         break;
     default:
         printf("Malformed message from stream server\n");

@@ -763,6 +763,7 @@ static void get_camera_details(struct template_state *tmpl, const char *name, co
 {
     char msg[IPC_BUFFER_SIZE];
     char result[IPC_BUFFER_SIZE];
+    msg[0] = '\0';
     get_server_response(GET_DEVICE_PROPS, msg, NULL);
     if (strlen(msg)) {
         process_server_response(msg, result);
