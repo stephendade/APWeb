@@ -818,7 +818,7 @@ static void start_rtsp_server(struct template_state *tmpl, const char *name, con
 static void stop_rtsp_server(struct template_state *tmpl, const char *name, const char *value, int argc, char **argv)
 {
     if (stream_server_pid != -1) {
-        if(!kill(stream_server_pid, SIGTERM)) {
+        if(!kill(stream_server_pid, SIGINT)) {
             stream_server_pid = -1;
             printf("Stream server successfully killed\n");
         } else {
