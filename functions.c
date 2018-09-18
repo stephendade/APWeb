@@ -810,7 +810,8 @@ static void start_rtsp_server(struct template_state *tmpl, const char *name, con
             char* home_dir;
             char stream_server_path[256];
             home_dir = getenv("HOME");
-            sprintf(stream_server_path, "%s/apsync/start_apstreamline/bin/stream_server", home_dir);
+            sprintf(stream_server_path, "%s/start_apstreamline/bin/stream_server", home_dir);
+            printf("%s", stream_server_path);
             if (execl(stream_server_path, "stream_server", argv[0], NULL)==-1) {
                 printf("Error in launching the stream server\n");
             }
