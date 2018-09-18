@@ -807,7 +807,11 @@ static void start_rtsp_server(struct template_state *tmpl, const char *name, con
         if (stream_server_pid < 0) {
             printf("Fork failed\n");
         } else if (stream_server_pid == 0) {
-            if (execlp("stream_server", "stream_server", argv[0], NULL)==-1) {
+            char* home_dir;
+            char stream_server_path[256];
+            home_dir = getenv("HOME");
+            sprintf(stream_server_path, "%s/apsync/start_apstreamline/bin/stream_server", home_dir);
+            if (execl(stream_server_path, "stream_server", argv[0], NULL)==-1) {
                 printf("Error in launching the stream server\n");
             }
         }
